@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {  login_bg } from "../../../assets";
+import { login_bg } from "../../../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -57,16 +57,6 @@ export const Login = () => {
   }, [error]);
 
   // handles login status and dispatches reset actions to relevant states in cleanup
-  useEffect(() => {
-    if (status === "fullfilled" && loggedInUser?.isVerified === true) {
-      toast.success(`Login successful`);
-      reset();
-    }
-    return () => {
-      dispatch(clearLoginError());
-      dispatch(resetLoginStatus());
-    };
-  }, [status]);
 
   const handleLogin = (data) => {
     const cred = { ...data };
@@ -90,6 +80,18 @@ export const Login = () => {
             sx={{
               width: "100%",
               height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+          <Box
+            component="img"
+            src={login_bg}
+            alt="athlete_login"
+            sx={{
+              width: "150%",
+              height: "50%",
               objectFit: "cover",
               objectPosition: "center",
               backgroundRepeat: "no-repeat",
