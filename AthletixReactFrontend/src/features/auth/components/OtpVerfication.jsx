@@ -206,14 +206,6 @@ export const OtpVerfication = () => {
                 {loggedInUser?.email}
               </Typography>
             </Stack>
-            <LoadingButton
-              onClick={handleSendOtp}
-              loading={resendOtpStatus === "pending"}
-              fullWidth
-              variant="contained"
-            >
-              Get OTP
-            </LoadingButton>
           </>
         )}
       </Stack>
