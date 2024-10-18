@@ -35,296 +35,210 @@ import {
 } from "../../order/OrderSlice";
 import { resetCartByUserIdAsync, selectCartItems } from "../../cart/CartSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { SHIPPING, TAXES } from "../../../constants";
+import { SHIPPING_COST, TAX_RATE } from "../../../constants";
 import { motion } from "framer-motion";
 
-export const Checkout = () => {
-  const status = "";
+export const CheckoutPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Redux state selectors
   const addresses = useSelector(selectAddresses);
-  const [selectedAddress, setSelectedAddress] = useState(addresses[0]);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cash");
+  const loggedInUser = useSelector(selectLoggedInUser);
+  const cartItems = useSelector(selectCartItems);
+  const addressStatus = useSelector(selectAddressStatus);
+  const orderStatus = useSelector(selectOrderStatus);
+  const currentOrder = useSelector(selectCurrentOrder);
+
+  // Local state variables
+  const [activeAddress, setActiveAddress] = useState(addresses[0] || null);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+
+  // Calculate total price
+  const cartTotal = cartItems.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
+  const orderTotal = cartTotal + SHIPPING_COST + TAX_RATE;
+
+  const theme = useTheme();
+  const isMobileView = useMediaQuery(theme.breakpoints.down(480));
+
+  // Form control using react-hook-form
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
     formState: { errors },
+    reset,
   } = useForm();
-  const dispatch = useDispatch();
-  const loggedInUser = useSelector(selectLoggedInUser);
-  const addressStatus = useSelector(selectAddressStatus);
-  const navigate = useNavigate();
-  const cartItems = useSelector(selectCartItems);
-  const orderStatus = useSelector(selectOrderStatus);
-  const currentOrder = useSelector(selectCurrentOrder);
-  const orderTotal = cartItems.reduce(
-    (acc, item) => item.product.price * item.quantity + acc,
-    0
-  );
-  const theme = useTheme();
-  const is900 = useMediaQuery(theme.breakpoints.down(900));
-  const is480 = useMediaQuery(theme.breakpoints.down(480));
 
+  // Handle adding a new address
+  const handleAddAddress = (formData) => {
+    const newAddress = { ...formData, userId: loggedInUser._id };
+    dispatch(addAddressAsync(newAddress));
+  };
+
+  // Handle order creation
+  const handleCreateOrder = () => {
+    const newOrder = {
+      user: loggedInUser._id,
+      items: cartItems,
+      shippingAddress: activeAddress,
+      paymentMethod,
+      totalAmount: orderTotal,
+    };
+    dispatch(createOrderAsync(newOrder));
+  };
+
+  // Side effects for resetting form after successful address submission
   useEffect(() => {
     if (addressStatus === "fulfilled") {
       reset();
     } else if (addressStatus === "rejected") {
-      alert("Error adding your address");
+      alert("Error while saving the address.");
     }
-  }, [addressStatus]);
+  }, [addressStatus, reset]);
 
+  // Side effects for handling order completion
   useEffect(() => {
-    if (currentOrder && currentOrder?._id) {
+    if (currentOrder?._id) {
       dispatch(resetCartByUserIdAsync(loggedInUser?._id));
-      navigate(`/order-success/${currentOrder?._id}`);
+      navigate(`/order-success/${currentOrder._id}`);
     }
-  }, [currentOrder]);
-
-  const handleAddAddress = (data) => {
-    const address = { ...data, user: loggedInUser._id };
-    dispatch(addAddressAsync(address));
-  };
-
-  const handleCreateOrder = () => {
-    const order = {
-      user: loggedInUser._id,
-      item: cartItems,
-      address: selectedAddress,
-      paymentMode: selectedPaymentMethod,
-      total: orderTotal + SHIPPING + TAXES,
-    };
-    dispatch(createOrderAsync(order));
-  };
+  }, [currentOrder, dispatch, navigate, loggedInUser]);
 
   return (
     <Stack
-      flexDirection={"row"}
+      direction={"row"}
       p={2}
-      rowGap={10}
-      justifyContent={"center"}
+      spacing={4}
       flexWrap={"wrap"}
-      mb={"5rem"}
-      mt={2}
-      columnGap={4}
+      justifyContent={"center"}
       alignItems={"flex-start"}
+      mb={5}
     >
-      {/* left box */}
-      <Stack rowGap={4}>
-        {/* heading */}
-        <Stack
-          flexDirection={"row"}
-          columnGap={is480 ? 0.3 : 1}
-          alignItems={"center"}
-        >
+      {/* Left section: Shipping form */}
+      <Stack spacing={4}>
+        <Stack direction={"row"} alignItems={"center"} spacing={1}>
           <motion.div whileHover={{ x: -5 }}>
-            <IconButton component={Link} to={"/cart"}>
-              <ArrowBackIcon fontSize={is480 ? "medium" : "large"} />
+            <IconButton component={Link} to="/cart">
+              <ArrowBackIcon fontSize={isMobileView ? "medium" : "large"} />
             </IconButton>
           </motion.div>
           <Typography variant="h4">Shipping Information</Typography>
         </Stack>
 
-        {/* address form */}
+        {/* Shipping Address Form */}
         <Stack
           component={"form"}
-          noValidate
-          rowGap={2}
+          spacing={2}
           onSubmit={handleSubmit(handleAddAddress)}
+          noValidate
         >
-          <Stack>
-            <Typography gutterBottom>Type</Typography>
-            <TextField
-              placeholder="Eg. Home, Buisness"
-              {...register("type", { required: "Type is required" })}
-            />
-            {errors.type && (
-              <FormHelperText error>{errors.type.message}</FormHelperText>
-            )}
-          </Stack>
-
-          <Stack>
-            <Typography gutterBottom>Street</Typography>
-            <TextField {...register("street", { required: "Street is required" })} />
-            {errors.street && (
-              <FormHelperText error>{errors.street.message}</FormHelperText>
-            )}
-          </Stack>
-
-          <Stack>
-            <Typography gutterBottom>Country</Typography>
-            <TextField {...register("country", { required: "Country is required" })} />
-            {errors.country && (
-              <FormHelperText error>{errors.country.message}</FormHelperText>
-            )}
-          </Stack>
-
-          <Stack>
-            <Typography gutterBottom>Phone Number</Typography>
-            <TextField
-              type="number"
-              error={!!errors.phoneNumber}
-              helperText={errors.phoneNumber ? errors.phoneNumber.message : ""}
-              {...register("phoneNumber", {
-                required: "Phone number is required",
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Enter a valid 10-digit phone number",
-                },
-              })}
-            />
-          </Stack>
-
-          <Stack flexDirection={"row"}>
-            <Stack width={"100%"}>
-              <Typography gutterBottom>City</Typography>
-              <TextField {...register("city", { required: "City is required" })} />
-              {errors.city && (
-                <FormHelperText error>{errors.city.message}</FormHelperText>
-              )}
-            </Stack>
-            <Stack width={"100%"}>
-              <Typography gutterBottom>State</Typography>
-              <TextField {...register("state", { required: "State is required" })} />
-              {errors.state && (
-                <FormHelperText error>{errors.state.message}</FormHelperText>
-              )}
-            </Stack>
-            <Stack width={"100%"}>
-              <Typography gutterBottom>Postal Code</Typography>
+          {/* Address Fields */}
+          {["type", "street", "country", "phoneNumber"].map((field) => (
+            <Stack key={field}>
+              <Typography gutterBottom>{field}</Typography>
               <TextField
-                type="number"
-                {...register("postalCode", { required: "Postal Code is required" })}
+                placeholder={`Enter ${field}`}
+                {...register(field, { required: `${field} is required` })}
               />
-              {errors.postalCode && (
-                <FormHelperText error>
-                  {errors.postalCode.message}
-                </FormHelperText>
+              {errors[field] && (
+                <FormHelperText error>{errors[field]?.message}</FormHelperText>
               )}
             </Stack>
+          ))}
+
+          {/* City, State, and Postal Code */}
+          <Stack direction={"row"} spacing={2}>
+            {["city", "state", "postalCode"].map((field) => (
+              <Stack key={field} flex={1}>
+                <Typography gutterBottom>{field}</Typography>
+                <TextField
+                  placeholder={`Enter ${field}`}
+                  {...register(field, { required: `${field} is required` })}
+                />
+                {errors[field] && (
+                  <FormHelperText error>
+                    {errors[field]?.message}
+                  </FormHelperText>
+                )}
+              </Stack>
+            ))}
           </Stack>
 
-          <Stack flexDirection={"row"} alignSelf={"flex-end"} columnGap={1}>
+          {/* Buttons */}
+          <Stack direction={"row"} justifyContent={"space-between"}>
             <LoadingButton
-              loading={status === "pending"}
+              loading={addressStatus === "pending"}
               type="submit"
               variant="contained"
             >
-              add
+              Save Address
             </LoadingButton>
-            <Button color="error" variant="outlined" onClick={() => reset()}>
-              Reset
+            <Button variant="outlined" color="error" onClick={() => reset()}>
+              Reset Form
             </Button>
           </Stack>
         </Stack>
 
-        {/* existing address */}
-        <Stack rowGap={3}>
-          <Stack>
-            <Typography variant="h6">Address</Typography>
-            <Typography variant="body2" color={"text.secondary"}>
-              Choose from existing Addresses
-            </Typography>
-          </Stack>
-
-          <Grid
-            container
-            gap={2}
-            width={is900 ? "auto" : "50rem"}
-            justifyContent={"flex-start"}
-            alignContent={"flex-start"}
-          >
-            {addresses.map((address, index) => (
-              <FormControl item>
-                <Stack
-                  key={address._id}
-                  p={is480 ? 2 : 2}
-                  width={is480 ? "100%" : "20rem"}
-                  height={is480 ? "auto" : "15rem"}
-                  rowGap={2}
-                  component={is480 ? Paper : Paper}
-                  elevation={1}
-                >
-                  <Stack flexDirection={"row"} alignItems={"center"}>
+        {/* Existing Addresses */}
+        <Stack spacing={2}>
+          <Typography variant="h6">Choose an existing address</Typography>
+          <Grid container spacing={2}>
+            {addresses.map((addr, idx) => (
+              <Grid item xs={12} md={4} key={addr._id}>
+                <Paper elevation={2} sx={{ padding: 2 }}>
+                  <Stack direction={"row"} alignItems={"center"}>
                     <Radio
-                      checked={selectedAddress === address}
-                      name="addressRadioGroup"
-                      value={selectedAddress}
-                      onChange={(e) => setSelectedAddress(addresses[index])}
+                      checked={activeAddress === addr}
+                      onChange={() => setActiveAddress(addr)}
                     />
-                    <Typography>{address.type}</Typography>
+                    <Typography>{addr.type}</Typography>
                   </Stack>
-
-                  {/* details */}
-                  <Stack>
-                    <Typography>{address.street}</Typography>
-                    <Typography>
-                      {address.state}, {address.city}, {address.country},{" "}
-                      {address.postalCode}
-                    </Typography>
-                    <Typography>{address.phoneNumber}</Typography>
-                  </Stack>
-                </Stack>
-              </FormControl>
+                  <Typography>{addr.street}</Typography>
+                  <Typography>
+                    {addr.city}, {addr.state}, {addr.country} -{" "}
+                    {addr.postalCode}
+                  </Typography>
+                  <Typography>{addr.phoneNumber}</Typography>
+                </Paper>
+              </Grid>
             ))}
           </Grid>
         </Stack>
 
-        {/* payment methods */}
-        <Stack rowGap={3}>
+        {/* Payment Methods */}
+        <Stack spacing={2}>
+          <Typography variant="h6">Payment Method</Typography>
           <Stack>
-            <Typography variant="h6">Payment Methods</Typography>
-            <Typography variant="body2" color={"text.secondary"}>
-              Please select a payment method
-            </Typography>
+            <Radio
+              checked={paymentMethod === "cash"}
+              onChange={() => setPaymentMethod("cash")}
+            />
+            <Typography>Cash on Delivery</Typography>
           </Stack>
-
-          <Stack rowGap={2}>
-            <Stack
-              flexDirection={"row"}
-              justifyContent={"flex-start"}
-              alignItems={"center"}
-            >
-              <Radio
-                value={selectedPaymentMethod}
-                name="paymentMethod"
-                checked={selectedPaymentMethod === "COD"}
-                onChange={() => setSelectedPaymentMethod("COD")}
-              />
-              <Typography>Cash</Typography>
-            </Stack>
-
-            <Stack
-              flexDirection={"row"}
-              justifyContent={"flex-start"}
-              alignItems={"center"}
-            >
-              <Radio
-                value={selectedPaymentMethod}
-                name="paymentMethod"
-                checked={selectedPaymentMethod === "CARD"}
-                onChange={() => setSelectedPaymentMethod("CARD")}
-              />
-              <Typography>Card</Typography>
-            </Stack>
+          <Stack>
+            <Radio
+              checked={paymentMethod === "card"}
+              onChange={() => setPaymentMethod("card")}
+            />
+            <Typography>Credit/Debit Card</Typography>
           </Stack>
         </Stack>
       </Stack>
 
-      {/* right box */}
-      <Stack
-        width={is900 ? "100%" : "auto"}
-        alignItems={is900 ? "flex-start" : ""}
-      >
-        <Typography variant="h4">Order summary</Typography>
+      {/* Right section: Order summary */}
+      <Stack spacing={4} width={isMobileView ? "100%" : "auto"}>
+        <Typography variant="h4">Order Summary</Typography>
         <Cart checkout={true} />
         <LoadingButton
           fullWidth
           loading={orderStatus === "pending"}
           variant="contained"
           onClick={handleCreateOrder}
-          size="large"
         >
-          Pay and order
+          Place Order
         </LoadingButton>
       </Stack>
     </Stack>
