@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 
-const products = [
+const seedProducts = [
   {
     _id: "66f65deb9ad29c93a928b26f",
     title: "Alexandre Christie AC 2B34 LDR Watch for Women – Black",
@@ -20,14 +20,14 @@ const products = [
       "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/FORZA+STOPWATCH/forza_stopwatch_usp2.jpg",
     ],
     isDeleted: false,
-    createdAt:"2024-09-27T07:25:31.746Z",
-    updatedAt: "2024-09-27T13:40:27.797Z",
+    createdAt: new Date("2024-09-27T07:25:31.746Z"),
+    updatedAt: new Date("2024-09-27T13:40:27.797Z"),
   },
   {
     _id: "66f7ee1c4e6c971635320369",
-    title: "Samsung 108 cm (43 inches) ",
+    title: "Samsung 108 cm (43 inches)",
     description:
-      "Resolution: 4K Ultra HD (3840 x 2160) Resolution |Refresh Rate : 50 Hertz\nConnectivity : 3 Hdmi Ports For Seamless Connectivity With External Devices | 1 X Usb-A Usb Ports To Connect Hard Drives Or Other Usb Devices |Wi-Fi | Bluetooth | Anynet+ (Hdmi-Cec)| Ethernet (Lan) Port| Rf In (Terrestrial / Cable Input / Satellite Input)\nSound: 20W Output- 2CH | Powerful Speakers with Q-Symphony\nSmart TV Features : Bixby | Web Browser | SmartThings Hub / Matter Hub / IoT-Sensor FuntionalityApple AirPlay | Daily+",
+      "Resolution: 4K Ultra HD (3840 x 2160) | Refresh Rate: 50 Hertz\nConnectivity: 3 HDMI Ports | 1 USB-A Port | Wi-Fi | Bluetooth | Anynet+ (HDMI-CEC) | Ethernet | RF In\nSound: 20W Output- 2CH | Powerful Speakers with Q-Symphony\nSmart TV Features: Bixby | Web Browser | SmartThings Hub | Apple AirPlay | Daily+",
     price: 28990,
     discountPercentage: 10,
     category: "66f7ec9f3e85b941934e2f2d",
@@ -40,16 +40,18 @@ const products = [
       "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Samsung+TV/tv3.jpg",
     ],
     isDeleted: false,
-    createdAt:  "2024-09-28T11:53:00.061Z",
-    updatedAt: "2024-09-28T11:53:00.061Z",
+    createdAt: new Date("2024-09-28T11:53:00.061Z"),
+    updatedAt: new Date("2024-09-28T11:53:00.061Z"),
   }
 ];
 
-exports.seedProduct = async () => {
+const seedProductData = async () => {
   try {
-    await Product.insertMany(products);
-    console.log("Product seeded successfully");
+    const result = await Product.insertMany(seedProducts);
+    console.log(`${result.length} products seeded successfully`);
   } catch (error) {
-    console.log(error);
+    console.error("Error seeding products:", error.message);
   }
 };
+
+module.exports = { seedProductData };
