@@ -1,43 +1,50 @@
-require('dotenv').config()
-const jwt=require('jsonwebtoken')
-const { sanitizeUser } = require('../utils/SanitizeUser')
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const { sanitizeUser } = require("../utils/SanitizeUser");
 
-exports.verifyToken=async(req,res,next)=>{
-    try {
-        // extract the token from request cookies
-        const {token}=req.cookies
+exports.verifyToken = async (req, res, next) => {
+  try {
+    // Extract the token from request cookies
+    const token = req.cookies?.token;
 
-        // if token is not there, return 401 response
-        if(!token){
-            return res.status(401).json({message:"Token missing, please login again"})
-        }
-
-        // verifies the token 
-        const decodedInfo=jwt.verify(token,process.env.SECRET_KEY)
-
-        // checks if decoded info contains legit details, then set that info in req.user and calls next
-        if(decodedInfo && decodedInfo._id && decodedInfo.email){
-            req.user=decodedInfo
-            next()
-        }
-
-        // if token is invalid then sends the response accordingly
-        else{
-            return res.status(401).json({message:"Invalid Token, please login again"})
-        }
-        
-    } catch (error) {
-
-        console.log(error);
-        
-        if (error instanceof jwt.TokenExpiredError) {
-            return res.status(401).json({ message: "Token expired, please login again" });
-        } 
-        else if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(401).json({ message: "Invalid Token, please login again" });
-        } 
-        else {
-            return res.status(500).json({ message: "Internal Server Error" });
-        }
+    // Return 401 response if token is missing
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "Authentication token missing. Please log in." });
     }
-}
+
+    // Verify the token using the secret key
+    const decodedInfo = jwt.verify(token, process.env.SECRET_KEY);
+
+    // Check if decoded info contains expected fields
+    if (decodedInfo?._id && decodedInfo?.email) {
+      req.user = sanitizeUser(decodedInfo); // sanitize user data before setting in req
+      return next();
+    }
+
+    // Respond with invalid token message if the payload is incorrect
+    return res
+      .status(401)
+      .json({ message: "Invalid token. Please log in again." });
+  } catch (error) {
+    console.error("Token verification error:", error);
+
+    // Handle token expiration and invalid token errors
+    if (error instanceof jwt.TokenExpiredError) {
+      return res
+        .status(401)
+        .json({ message: "Session expired. Please log in again." });
+    }
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res
+        .status(401)
+        .json({ message: "Invalid token. Please log in again." });
+    }
+
+    // Handle any other errors as an internal server error
+    return res
+      .status(500)
+      .json({ message: "Internal server error. Please try again later." });
+  }
+};
