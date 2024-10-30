@@ -32,14 +32,6 @@ const productSchema= new Schema({
         type:Number,
         required:true
     },
-    thumbnail:{
-        type:String,
-        required:true
-    },
-    images:{
-        type:[String],
-        required:true
-    },
     isDeleted:{
         type:Boolean,
         default:false
