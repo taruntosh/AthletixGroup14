@@ -88,7 +88,7 @@ export const Address = ({id,type,street,postalCode,country,phoneNumber,state,cit
                 <Typography>Postal Code- {postalCode}</Typography>
                 <Typography>Country - {country}</Typography>
                 <Typography>Phone Number - {phoneNumber}</Typography>
-                <Typography>State - {state}</Typography>
+                <Typography>Province - {state}</Typography>
                 <Typography>City - {city}</Typography>
                 </>
                 )

@@ -119,7 +119,7 @@ export const UserProfile = () => {
                     
                                         <Stack>
                                             <Typography gutterBottom>Postal Code</Typography>
-                                            <TextField type='number' {...register("postalCode",{required:true})}/>
+                                            <TextField {...register("postalCode",{required:true})}/>
                                         </Stack>
                     
                                         <Stack>
@@ -133,7 +133,7 @@ export const UserProfile = () => {
                                         </Stack>
                     
                                         <Stack>
-                                            <Typography gutterBottom>State</Typography>
+                                            <Typography gutterBottom>Province</Typography>
                                             <TextField {...register("state",{required:true})}/>
                                         </Stack>
                     

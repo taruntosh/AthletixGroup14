@@ -183,7 +183,7 @@ export const Checkout = () => {
               )}
             </Stack>
             <Stack width={"100%"}>
-              <Typography gutterBottom>State</Typography>
+              <Typography gutterBottom>Province</Typography>
               <TextField {...register("state", { required: "State is required" })} />
               {errors.state && (
                 <FormHelperText error>{errors.state.message}</FormHelperText>
@@ -192,7 +192,7 @@ export const Checkout = () => {
             <Stack width={"100%"}>
               <Typography gutterBottom>Postal Code</Typography>
               <TextField
-                type="number"
+            
                 {...register("postalCode", { required: "Postal Code is required" })}
               />
               {errors.postalCode && (

@@ -34,9 +34,9 @@ export const Footer = () => {
 
                 <Stack rowGap={'1rem'} padding={'1rem'}>
                     <Typography variant='h6'>Support</Typography>
-                    <Typography sx={labelStyles}>Door no :7, Plot no : 102, Manirajan Street, A.V.Krishnasamy St, Valasaravakkam, Chennai - 600087.</Typography>
-                    <Typography sx={labelStyles}>Support@zedbyte.in</Typography>
-                    <Typography sx={labelStyles}>+91 8825464712</Typography>
+                    <Typography sx={labelStyles}>299 Doon Valley Dr, Kitchener, ON N2G 4M4</Typography>
+                    <Typography sx={labelStyles}>support@athletix.in</Typography>
+                    <Typography sx={labelStyles}>437-662-1234</Typography>
                 </Stack>
 
                 <Stack rowGap={'1rem'} padding={'1rem'}>
@@ -75,7 +75,7 @@ export const Footer = () => {
 
             {/* lower */}
             <Stack alignSelf={"center"}>
-                <Typography color={'GrayText'}>&copy; Zedbyte software solution {new Date().getFullYear()}. All right reserved</Typography>
+                <Typography color={'GrayText'}>&copy; Athletix {new Date().getFullYear()}</Typography>
             </Stack>
 
     </Stack>
