@@ -1,0 +1,22 @@
+services:
+  frontend:
+    build:
+      context: ./AthletixReactFrontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+
+  backend:
+    build:
+      context: ./AthletixNodeBackend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./AthletixNodeBackend:/app
+    env_file:
+      - ./AthletixNodeBackend/.env
