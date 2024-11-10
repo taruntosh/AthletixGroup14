@@ -11,17 +11,17 @@ const orders = [
         user: "66f639d5f35f6ece4a5b02bf",
         product: {
           _id: "66f65deb9ad29c93a928b26f",
-          title: "Alexandre Christie AC 2B34 LDR Watch for Women – Black",
+          title: "Nike Elite Volleyball - Indoor/Outdoor",
           description:
-            "Merging form with function, this chronograph watch by Alexandre Christie lends you a modish look. The round-shaped dial is secured by a mineral glass and is encased in a 35 mm case. It is water resistant up to 30 m and is completed with a buckle clasp to ensure a secure fit on the wrist.",
-          price: 20,
-          discountPercentage: 2,
-          category: "66f6567b972f1e40f3efe8ca",
+            "The Nike Elite Volleyball is designed for both indoor and outdoor play. Its soft-touch cover and optimal grip pattern provide excellent control for players of all levels. Durable and built for long-lasting performance, this volleyball is perfect for intense training sessions or casual games.",
+          price: 40,
+          discountPercentage: 5,
+          category: "66f7ec9f3e85b941934e2f2d",
           brand: {
             _id: "66f65d9a6487e3a8fbb927d5",
-            name: "Testing Brand",
+            name: "Nike",
           },
-          stockQuantity: 47,
+          stockQuantity: 30,
           thumbnail:
             "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/FORZA+STOPWATCH/forza_stopwatch_usp2.jpg",
           images: [
@@ -40,12 +40,12 @@ const orders = [
     address: [
       {
         user: "66f639d5f35f6ece4a5b02bf",
-        street: "!!, mahavishnu nagar, ponniammanmedu, chennai - 99",
-        city: "chennai",
-        state: "Tamil Nadu",
-        phoneNumber: "8825464712",
-        postalCode: "600110",
-        country: "india",
+        street: "789 Pinewood Crescent, Willowdale",
+        city: "North York",
+        state: "Ontario",
+        phoneNumber: "6471234567",
+        postalCode: "M2N 5X7",
+        country: "Canada",
         type: "Home",
         _id: "66f6b859778cee45450e921d",
         __v: 0,

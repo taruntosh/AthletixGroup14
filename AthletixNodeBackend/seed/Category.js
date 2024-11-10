@@ -3,12 +3,12 @@ const Category = require("../models/Category");
 const categories = [
   {
     _id: "66f6567b972f1e40f3efe8ca",
-    name: "Watch",
+    name: "Gym",
     __v: 0,
   },
   {
     _id: "66f7ec9f3e85b941934e2f2d",
-    name: "TV",
+    name: "Volley Ball",
     __v: 0,
   },
 ];

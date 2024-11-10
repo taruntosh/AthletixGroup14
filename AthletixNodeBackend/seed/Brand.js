@@ -3,11 +3,11 @@ const Brand = require("../models/Brand");
 const brands = [
   {
     _id: "66f65d9a6487e3a8fbb927d5",
-    name: "Apple",
+    name: "Nike",
   },
   {
     _id: "66f7ec953e85b941934e2f2b",
-    name: "Samsung",
+    name: "Adidas",
   },
 ];
 
