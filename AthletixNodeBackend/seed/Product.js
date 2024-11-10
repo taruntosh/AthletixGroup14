@@ -12,11 +12,10 @@ const products = [
     brand: "66f65d9a6487e3a8fbb927d5",
     stockQuantity: 30,
     thumbnail:
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Nike_Volleyball/volleyball_main.jpg",
+      "https://apim.sportchek.ca/v1/product/api/v1/product/image/81052399f?baseStoreId=SC&lang=en_CA&subscription-key=c01ef3612328420c9f5cd9277e815a0e&imwidth=640&impolicy=mZoom",
     images: [
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Nike_Volleyball/volleyball_main.jpg",
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Nike_Volleyball/volleyball_side.jpg",
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Nike_Volleyball/volleyball_detail.jpg",
+      "https://apim.sportchek.ca/v1/product/api/v1/product/image/81052399f?baseStoreId=SC&lang=en_CA&subscription-key=c01ef3612328420c9f5cd9277e815a0e&imwidth=640&impolicy=mZoom",
+      "https://cdn.shoplightspeed.com/shops/632351/files/65915094/nike-all-court-volleyball.jpg",
     ],
     isDeleted: false,
     createdAt: "2024-09-27T07:25:31.746Z",
@@ -32,12 +31,10 @@ const products = [
     category: "66f7ec9f3e85b941934e2f2d",
     brand: "66f7ec953e85b941934e2f2b",
     stockQuantity: 25,
-    thumbnail:
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Adidas_Dumbbells/dumbbells_main.jpg",
+    thumbnail: "https://m.media-amazon.com/images/I/71IY2JcXsaL.jpg",
     images: [
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Adidas_Dumbbells/dumbbells_main.jpg",
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Adidas_Dumbbells/dumbbells_side.jpg",
-      "https://dashdrop-setup.s3.ap-south-1.amazonaws.com/ATHLETE-WEBSITE/PRODUCTS/Adidas_Dumbbells/dumbbells_detail.jpg",
+      "https://m.media-amazon.com/images/I/71IY2JcXsaL.jpg",
+      "https://m.media-amazon.com/images/I/91g1ZGtBj9L.jpg",
     ],
     isDeleted: false,
     createdAt: "2024-09-28T11:53:00.061Z",
