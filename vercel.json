@@ -1,19 +1,26 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "AthletixReactFrontend/package.json",
-        "use": "@vercel/static-build",
-        "config": { "distDir": "AthletixReactFrontend/build" }
-      },
-      {
-        "src": "AthletixNodeBackend/**/*.js",
-        "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "AthletixReactFrontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
       }
-    ],
-    "routes": [
-      { "src": "/api/(.*)", "dest": "/AthletixNodeBackend/$1" },
-      { "src": "/(.*)", "dest": "/AthletixReactFrontend/$1" }
-    ]
-  }
-  
+    },
+    {
+      "src": "AthletixNodeBackend/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "AthletixNodeBackend/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "AthletixReactFrontend/$1"
+    }
+  ]
+}
