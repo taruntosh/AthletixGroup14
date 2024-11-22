@@ -50,5 +50,9 @@ server.get("/", (req, res) => {
   res.status(200).json({ message: "running" });
 });
 
+server.listen(8000,()=>{
+    console.log('server [STARTED] ~ http://localhost:8000');
+})
+
 // Export the server for Vercel
-module.exports = server;
+//module.exports = server;
