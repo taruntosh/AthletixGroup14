@@ -1,20 +1,20 @@
 import {
-    FormControl,
-    Grid,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    Stack,
-    Typography,
-    useMediaQuery,
-    useTheme,
-    Box,
-    Paper,
-    Pagination,
-  } from "@mui/material";
-  import { motion } from "framer-motion";
-  
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  Box,
+  Paper,
+  Pagination,
+} from "@mui/material";
+import { motion } from "framer-motion";
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,6 +26,7 @@ import {
   selectProducts,
   toggleFilters,
 } from "../ProductSlice";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ProductCard } from "./ProductCard";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -225,101 +226,184 @@ export const ProductList = () => {
         </Stack>
       )}
 
-      {/* Sort options */}
-      <Stack
-        flexDirection={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
-        py={3}
-        px={5}
-        bgcolor="background.paper"
-        boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-        borderRadius={"12px"}
-      >
-        <Typography variant="h6" color="text.primary">
-          Sort Products
-        </Typography>
-        <FormControl sx={{ minWidth: "150px" }} variant="outlined">
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            label="Sort By"
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  bgcolor: "background.default",
-                  borderRadius: "8px",
-                  boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.15)",
-                },
-              },
+      {/* Filters Section */}
+      <Grid container spacing={3} px={5} my={3}>
+        <Grid item xs={12} sm={3}>
+          <Paper
+            elevation={2}
+            sx={{
+              padding: 3,
+              borderRadius: "12px",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <MenuItem value={null}>Reset</MenuItem>
-            {sortOptions.map((option) => (
-              <MenuItem key={option.sort} value={option}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Stack>
+            <Typography variant="h6" color="text.primary" mb={2}>
+              Filters
+            </Typography>
 
-      {/* Product Grid */}
-      <Grid
-        container
-        spacing={3}
-        justifyContent={"center"}
-        alignItems={"center"}
-        gap={3}
-        sx={{ py: 5 }}
-      >
-        {products.map((product) => (
-          <motion.div
-            key={product._id}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            {/* Brand Filters */}
+            <Stack mt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<AddIcon />}
+                  aria-controls="brand-filters"
+                  id="brand-filters"
+                >
+                  <Typography>Brands</Typography>
+                </AccordionSummary>
+
+                <AccordionDetails sx={{ p: 0 }}>
+                  <FormGroup onChange={handleBrandFilters}>
+                    {brands?.map((brand) => (
+                      <motion.div
+                        style={{ width: "fit-content" }}
+                        whileHover={{ x: 5 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FormControlLabel
+                          sx={{ ml: 1 }}
+                          control={<Checkbox whileHover={{ scale: 1.1 }} />}
+                          label={brand.name}
+                          value={brand._id}
+                        />
+                      </motion.div>
+                    ))}
+                  </FormGroup>
+                </AccordionDetails>
+              </Accordion>
+            </Stack>
+
+            {/* Category Filters */}
+            <Stack mt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<AddIcon />}
+                  aria-controls="brand-filters"
+                  id="brand-filters"
+                >
+                  <Typography>Category</Typography>
+                </AccordionSummary>
+
+                <AccordionDetails sx={{ p: 0 }}>
+                  <FormGroup onChange={handleCategoryFilters}>
+                    {categories?.map((category) => (
+                      <motion.div
+                        style={{ width: "fit-content" }}
+                        whileHover={{ x: 5 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <FormControlLabel
+                          sx={{ ml: 1 }}
+                          control={<Checkbox whileHover={{ scale: 1.1 }} />}
+                          label={category.name}
+                          value={category._id}
+                        />
+                      </motion.div>
+                    ))}
+                  </FormGroup>
+                </AccordionDetails>
+              </Accordion>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* Products Section */}
+        <Grid item xs={12} sm={9}>
+          <Stack
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            py={3}
+            px={5}
+            bgcolor="background.paper"
+            boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
+            borderRadius={"12px"}
           >
-              <ProductCard
-                id={product._id}
-                title={product.title}
-                thumbnail={product.thumbnail}
-                brand={product.brand.name}
-                price={product.price}
-                handleAddRemoveFromWishlist={handleAddRemoveFromWishlist}
-              />
+            <Typography variant="h6" color="text.primary">
+              Sort Products
+            </Typography>
+            <FormControl sx={{ minWidth: "150px" }} variant="outlined">
+              <InputLabel>Sort By</InputLabel>
+              <Select
+                label="Sort By"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      bgcolor: "background.default",
+                      borderRadius: "8px",
+                      boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.15)",
+                    },
+                  },
+                }}
+              >
+                <MenuItem value={null}>Reset</MenuItem>
+                {sortOptions.map((option) => (
+                  <MenuItem key={option.sort} value={option}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
 
-          </motion.div>
-        ))}
+          {/* Product Grid */}
+          <Grid
+            container
+            spacing={3}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={3}
+            sx={{ py: 5 }}
+          >
+            {products.map((product) => (
+              <motion.div
+                key={product._id}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <ProductCard
+                  id={product._id}
+                  title={product.title}
+                  thumbnail={product.thumbnail}
+                  brand={product.brand.name}
+                  price={product.price}
+                  handleAddRemoveFromWishlist={handleAddRemoveFromWishlist}
+                />
+              </motion.div>
+            ))}
+          </Grid>
+
+          {/* Pagination */}
+          <Stack
+            direction="row"
+            justifyContent={is488 ? "center" : "flex-end"}
+            pr={is488 ? 0 : 5}
+            rowGap={2}
+          >
+            <Pagination
+              size={is488 ? "small" : "large"}
+              page={page}
+              onChange={(e, page) => setPage(page)}
+              count={Math.ceil(totalResults / ITEMS_PER_PAGE)}
+              variant="outlined"
+              shape="rounded"
+              sx={{
+                ".Mui-selected": {
+                  bgcolor: "primary.main",
+                  color: "#fff",
+                },
+              }}
+            />
+            <Typography variant="caption">
+              Showing {Math.min((page - 1) * ITEMS_PER_PAGE + 1, totalResults)}{" "}
+              - {Math.min(page * ITEMS_PER_PAGE, totalResults)} of{" "}
+              {totalResults} results
+            </Typography>
+          </Stack>
+        </Grid>
       </Grid>
-
-      {/* Pagination */}
-      <Stack
-        direction="row"
-        justifyContent={is488 ? "center" : "flex-end"}
-        pr={is488 ? 0 : 5}
-        rowGap={2}
-      >
-        <Pagination
-          size={is488 ? "small" : "large"}
-          page={page}
-          onChange={(e, page) => setPage(page)}
-          count={Math.ceil(totalResults / ITEMS_PER_PAGE)}
-          variant="outlined"
-          shape="rounded"
-          sx={{
-            ".Mui-selected": {
-              bgcolor: "primary.main",
-              color: "#fff",
-            },
-          }}
-        />
-        <Typography variant="caption">
-          Showing {Math.min((page - 1) * ITEMS_PER_PAGE + 1, totalResults)} -{" "}
-          {Math.min(page * ITEMS_PER_PAGE, totalResults)} of {totalResults}{" "}
-          results
-        </Typography>
-      </Stack>
     </Stack>
   );
 };
