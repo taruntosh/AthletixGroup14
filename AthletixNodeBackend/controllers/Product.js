@@ -35,6 +35,10 @@ exports.getAll = async (req, res) => {
             sort[req.query.sort]=req.query.order?req.query.order==='asc'?1:-1:1
         }
 
+         if (req.query.search) {
+            filter.title = { $regex: req.query.search, $options: 'i' };
+        }
+
         if(req.query.page && req.query.limit){
 
             const pageSize=req.query.limit
