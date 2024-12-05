@@ -23,6 +23,11 @@ export const fetchProducts=async(filters)=>{
         })
     }
 
+    if (filters.search) {
+        console.log("inside product api", filters.search);
+        queryString += `search=${encodeURIComponent(filters.search)}&`;
+    }
+
     if(filters.pagination){
         queryString+=`page=${filters.pagination.page}&limit=${filters.pagination.limit}&`
     }
