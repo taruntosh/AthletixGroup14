@@ -12,6 +12,8 @@ import {
   Box,
   Paper,
   Pagination,
+  TextField,
+  Button
 } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -76,6 +78,7 @@ export const ProductList = () => {
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const theme = useTheme();
 
   const is1200 = useMediaQuery(theme.breakpoints.down(1200));
@@ -116,6 +119,22 @@ export const ProductList = () => {
     setFilters({ ...filters, brand: filterArray });
   };
 
+
+  // Function to handle search input changes
+  const handleSearch = () => {
+    const filterSet = new Set(filters.search);
+    console.log("search Query", searchQuery);
+    
+    if (searchQuery) {
+      filterSet.add(searchQuery);
+    } else {
+      filterSet.delete(searchQuery);
+    }
+
+    const filterArray = Array.from(filterSet);
+    setFilters({ ...filters, search: filterArray });
+  };
+
   const handleCategoryFilters = (e) => {
     const filterSet = new Set(filters.category);
 
@@ -146,12 +165,16 @@ export const ProductList = () => {
     finalFilters["pagination"] = { page: page, limit: ITEMS_PER_PAGE };
     finalFilters["sort"] = sort;
 
+    if (searchQuery) {
+      finalFilters["search"] = searchQuery.trim(); // Add title filter for search
+    }
+
     if (!loggedInUser?.isAdmin) {
       finalFilters["user"] = true;
     }
 
     dispatch(fetchProductsAsync(finalFilters));
-  }, [filters, page, sort]);
+  }, [filters, page, sort, searchQuery]);
 
   const handleAddRemoveFromWishlist = (e, productId) => {
     if (e.target.checked) {
@@ -240,6 +263,25 @@ export const ProductList = () => {
             <Typography variant="h6" color="text.primary" mb={2}>
               Filters
             </Typography>
+
+            <FormControl
+              fullWidth
+              sx={{ mb: 2, display: "flex", flexDirection: "row", gap: 1 }}
+            >
+              <TextField
+                id="search-bar"
+                variant="outlined"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} // Update the searchQuery state
+                placeholder="Search by product title"
+                sx={{
+                  flexGrow: 1,
+                  bgcolor: "background.paper",
+                  borderRadius: "8px",
+                  boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+            </FormControl>
 
             {/* Brand Filters */}
             <Stack mt={2}>
