@@ -10,25 +10,25 @@ exports.create = async (req, res) => {
 
         const invoice = {
             shipping: {
-                name: "John Doe",
-                address: "1234 Main Street",
-                city: "San Francisco",
-                state: "CA",
-                country: "US",
-                postal_code: 94111
+                name: "Taruntosh",
+                address: "299 Doon Valley Drive",
+                city: "Kitchener",
+                state: "ON",
+                country: "CA",
+                postal_code: "N2M 3R7"
             },
             items: [
                 {
-                    item: "1234",
-                    description: "shirt",
+                    item: "Nike Elite Volleyball - Indoor/Outdoor",
+                    description: "Sports Volleyball",
                     quantity: 2,
-                    amount: 6000
+                    amount: 999
                 },
                 {
-                    item: "346",
-                    description: "watch",
+                    item: "Adidas Adjustable Dumbbells Set - 20kg",
+                    description: "Gym",
                     quantity: 1,
-                    amount: 2000
+                    amount: 799
                 }
             ],
             subtotal: 8000,
