@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
             ],
             subtotal: 8000,
             paid: 0,
-            invoice_nr: 1234
+            invoice_nr: '20241209ONCA'
         };
         const invoicebin = await createInvoice(invoice)
 

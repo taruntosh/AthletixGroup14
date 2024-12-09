@@ -40,8 +40,8 @@ function generateHeader(doc) {
         .text("Athletix", 110, 57)
         .fontSize(10)
         .text("Athletix", 200, 50, { align: "right" })
-        .text("1123 Main Street", 200, 65, { align: "right" })
-        .text("New York, NY, 10025", 200, 80, { align: "right" })
+        .text("123 Main Street", 200, 65, { align: "right" })
+        .text("Kitchener, ON, CA", 200, 80, { align: "right" })
         .moveDown();
 }
 
@@ -97,7 +97,6 @@ function generateInvoiceTable(doc, invoice) {
         doc,
         invoiceTableTop,
         "Item",
-        "Description",
         "Unit Cost",
         "Quantity",
         "Line Total"
@@ -112,7 +111,6 @@ function generateInvoiceTable(doc, invoice) {
             doc,
             position,
             item.item,
-            item.description,
             formatCurrency(item.amount / item.quantity),
             item.quantity,
             formatCurrency(item.amount)
@@ -196,7 +194,7 @@ function generateHr(doc, y) {
 }
 
 function formatCurrency(cents) {
-    return "$" + (cents / 100).toFixed(2);
+    return "$" + (cents);
 }
 
 function formatDate(date) {
